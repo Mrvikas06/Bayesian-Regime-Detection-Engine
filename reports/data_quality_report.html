@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Phase 1 — Data Quality Report</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin: 40px; color: #222}
+    h1 {color: #2c5f8a} h2 {color: #2c5f8a; border-bottom: 2px solid #2c5f8a}
+    .badge-ok {background:#d4edda;padding:2px 8px;border-radius:4px;color:#155724}
+    .badge-warn {background:#fff3cd;padding:2px 8px;border-radius:4px;color:#856404}
+    .badge-err {background:#f8d7da;padding:2px 8px;border-radius:4px;color:#721c24}
+    pre {background:#f4f4f4;padding:12px;border-radius:4px;font-size:12px}
+  </style>
+</head>
+<body>
+<h1>Phase 1 — Data Quality Report</h1>
+<p><strong>Generated:</strong> 2026-11-26 13:35 UTC</p>
+<p><strong>Total flags:</strong> <span class="badge-warn">11</span></p>
+<p><strong>Dataset shape:</strong> 5,190 rows × 7 columns
+   &nbsp;|&nbsp; <strong>Date range:</strong> 2007-01-01 → 2026-11-25</p>
+
+<h2>1. Missing Values</h2>
+<p>Threshold: &gt; 3% flags the series.</p>
+
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;font-size:12px">
+  <thead><tr style="background:#2c5f8a;color:white"><th>column</th><th>n_total</th><th>n_missing</th><th>pct_missing</th><th>flag</th></tr></thead>
+  <tbody><tr style="background:#fff3cd"><td>india_vix</td><td>5190</td><td>305</td><td>0.0588</td><td>True</td></tr><tr style="background:#fff3cd"><td>nifty_midcap</td><td>5190</td><td>190</td><td>0.0366</td><td>True</td></tr><tr style="background:#fff3cd"><td>nifty50</td><td>5190</td><td>185</td><td>0.0356</td><td>True</td></tr><tr style="background:#fff3cd"><td>nifty_bank</td><td>5190</td><td>185</td><td>0.0356</td><td>True</td></tr><tr><td>usdinr</td><td>5190</td><td>12</td><td>0.0023</td><td>False</td></tr><tr><td>us_10y</td><td>5190</td><td>2</td><td>0.0004</td><td>False</td></tr><tr><td>dxy</td><td>5190</td><td>1</td><td>0.0002</td><td>False</td></tr></tbody>
+</table>
+
+
+<h2>2. Outliers (|z| &gt; 5.0)</h2>
+<p>Computed on 1-day returns. Large spikes on known event dates are expected (2008, 2020).</p>
+
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;font-size:12px">
+  <thead><tr style="background:#2c5f8a;color:white"><th>column</th><th>n_outliers</th><th>worst_dates</th><th>flag</th></tr></thead>
+  <tbody><tr style="background:#fff3cd"><td>india_vix</td><td>16</td><td>['2025-04-07', '2015-08-24', '2008-07-15']</td><td>True</td></tr><tr style="background:#fff3cd"><td>us_10y</td><td>16</td><td>['2020-03-10', '2020-03-17', '2020-03-09']</td><td>True</td></tr><tr style="background:#fff3cd"><td>nifty50</td><td>14</td><td>['2009-05-18', '2020-03-23', '2008-10-24']</td><td>True</td></tr><tr style="background:#fff3cd"><td>usdinr</td><td>14</td><td>['2012-01-31', '2012-01-30', '2012-02-01']</td><td>True</td></tr><tr style="background:#fff3cd"><td>nifty_bank</td><td>11</td><td>['2009-05-18', '2020-03-23', '2008-10-24']</td><td>True</td></tr><tr style="background:#fff3cd"><td>dxy</td><td>5</td><td>['2009-03-18', '2008-09-30', '2008-11-24']</td><td>True</td></tr><tr style="background:#fff3cd"><td>nifty_midcap</td><td>3</td><td>['2007-09-25', '2008-01-21', '2020-03-23']</td><td>True</td></tr></tbody>
+</table>
+
+
+<h2>3. History Length</h2>
+<p>Minimum required: 10 years.</p>
+
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;font-size:12px">
+  <thead><tr style="background:#2c5f8a;color:white"><th>column</th><th>start</th><th>end</th><th>years</th><th>flag</th></tr></thead>
+  <tbody><tr><td>india_vix</td><td>2008-03-03</td><td>2026-11-25</td><td>18.7</td><td>False</td></tr><tr><td>nifty50</td><td>2007-09-17</td><td>2026-11-25</td><td>19.2</td><td>False</td></tr><tr><td>nifty_midcap</td><td>2007-09-24</td><td>2026-11-25</td><td>19.2</td><td>False</td></tr><tr><td>nifty_bank</td><td>2007-09-17</td><td>2026-11-25</td><td>19.2</td><td>False</td></tr><tr><td>usdinr</td><td>2007-01-01</td><td>2026-11-25</td><td>19.9</td><td>False</td></tr><tr><td>us_10y</td><td>2007-01-03</td><td>2026-11-25</td><td>19.9</td><td>False</td></tr><tr><td>dxy</td><td>2007-01-02</td><td>2026-11-25</td><td>19.9</td><td>False</td></tr></tbody>
+</table>
+
+
+<h2>4. Weekend / Holiday Gaps</h2>
+<p>Weekend rows remaining in index: <strong>0</strong>
+   ✅</p>
+
+<h2>5. Consecutive NaN Stretches (primary: nifty50)</h2>
+<p>Top 20 gaps; long gaps around 2008 crisis and COVID may be expected.</p>
+
+<table border="1" cellpadding="4" cellspacing="0" style="border-collapse:collapse;font-size:12px">
+  <thead><tr style="background:#2c5f8a;color:white"><th>start</th><th>end</th><th>n_days</th></tr></thead>
+  <tbody><tr><td>2007-01-01</td><td>2007-09-14</td><td>257</td></tr></tbody>
+</table>
+
+
+<h2>6. Column Summary</h2>
+<pre>
+            nifty50  nifty_midcap    india_vix       usdinr    nifty_bank       us_10y          dxy
+count   5005.000000   5000.000000  4885.000000  5178.000000   5005.000000  5188.000000  5189.000000
+mean   11494.158997   6002.920630    19.708201    65.276341  25213.895924     2.879053    91.053207
+std     6778.555412   4811.531164     9.073304    15.194254  16029.494681     1.102023     9.992550
+min     2524.199951    993.197754     9.150000    39.044998   3339.661133     0.499000    71.330002
+25%     5740.750000   2551.278442    14.020000    50.868000  10963.273438     1.996000    80.970001
+50%     9039.250000   4077.235596    16.950001    66.245499  20390.212891     2.743000    93.699997
+75%    17092.199219   8125.710083    21.920000    75.621525  36573.875000     3.822750    98.830002
+max    26328.550781  18491.449219    85.129997    96.876900  64635.199219     5.311000   114.110001
+</pre>
+
+<h2>7. Proxies and Gaps Catalogue</h2>
+<ul>
+  <li><strong>nifty_midcap</strong>: Nifty Midcap 50 used as proxy for Midcap 100; full 100-stock series unavailable on yfinance</li>
+  <li><strong>nifty_smallcap</strong>: yfinance coverage for Smallcap 100 is sparse before 2010; gap filled with Nifty Smallcap 250 from 2012</li>
+  <li><strong>credit_spread</strong>: AAA-Gilt spread approximated as CRISIL AAA composite minus 10Y gilt; exact series unavailable on yfinance, use RBI/CMIE manual download</li>
+  <li><strong>fii_dii flows</strong>: Download from NSE India → Reports → FII DII Activity</li>
+  <li><strong>sip monthly</strong>: Download from AMFI industry data</li>
+</ul>
+
+</body>
+</html>
