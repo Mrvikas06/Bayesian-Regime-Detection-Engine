@@ -1,0 +1,50 @@
+# ============================================================
+#  CONFORMAL & ONLINE CONFIG — Bayesian Regime Detection Engine
+# ============================================================
+
+seed: 42
+
+# ---- Conformal calibration (Phase 10) ----------------------
+conformal:
+  alpha: 0.10                            # 90% coverage target
+  methods:
+    - split_conformal
+    - aps                                # Adaptive Prediction Sets
+    - mondrian                           # Mondrian (stratum = VIX regime)
+    - aci                                # Adaptive Conformal Inference (shift-robust)
+  calibration_window: 252               # rolling window for coverage monitoring
+  coverage_tolerance: 0.03              # allow ±3pp around nominal
+
+# ---- Online inference (Phase 9) ----------------------------
+online:
+  particle_filter:
+    n_particles: 1000
+    resampling: "systematic"
+    roughening_sigma: 0.001
+  bocpd:
+    hazard_rate: 0.01                    # expected run length ~ 100 days
+    min_signal_days: 5                   # suppress alerts < 5 day runs
+    expected_breakpoints: [             # for BOCPD evaluation
+      "2013-06-01", "2016-11-08", "2018-09-21", "2020-03-23", "2024-06-04"
+    ]
+    false_alarm_window_days: 21         # a hit is within ±21 days of expected
+  streaming:
+    update_frequency: "daily"
+    batch_reconciliation: "daily"
+    intraday_online: false              # Phase 1 implementation is daily
+
+# ---- Backtest (Phase 12) -----------------------------------
+backtest:
+  train_end:    "2018-12-31"
+  test_start:   "2019-01-01"
+  test_end:     "2024-12-31"
+  rebalance_freq: "M"                   # monthly
+  transaction_cost_bps: 20
+  benchmark: "nifty50"
+  allocation_rules:
+    Risk-On:       {equity: 0.90, debt: 0.10}
+    Transitional:  {equity: 0.70, debt: 0.30}
+    Late-Cycle:    {equity: 0.60, debt: 0.40}
+    Risk-Off:      {equity: 0.30, debt: 0.70}
+    Post-Shock:    {equity: 0.50, debt: 0.50}
+  min_conviction: 0.55                  # only tilt if top regime prob > 0.55
