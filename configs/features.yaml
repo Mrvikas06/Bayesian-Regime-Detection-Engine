@@ -1,0 +1,69 @@
+# ============================================================
+#  FEATURES CONFIG — Bayesian Regime Detection Engine
+# ============================================================
+
+seed: 42
+input_parquet: "data/processed/master.parquet"
+output_parquet: "data/processed/features.parquet"
+lineage_json:   "data/lineage/phase2_lineage.json"
+
+# ---- Trend features ----------------------------------------
+trend:
+  dma_windows: [20, 50, 100, 200]       # DMA ratios: price / DMA_N
+  golden_cross: [50, 200]               # 50-DMA > 200-DMA binary flag
+  rsi_window: 14
+
+# ---- Volatility features -----------------------------------
+volatility:
+  realised_windows: [5, 21, 63]         # realised vol (annualised)
+  vix_level: true
+  vix_ratio: true                        # VIX / 252-day realised vol
+  garch_fit: false                       # set true to fit GARCH(1,1) per roll
+
+# ---- Breadth (approximated from cap-segment indices) -------
+breadth:
+  pct_above_dma: [50, 200]              # fraction of Nifty500 above N-DMA (proxy)
+  advance_decline_proxy: true            # (Midcap-Smallcap relative) as proxy
+
+# ---- Flow features -----------------------------------------
+flows:
+  fii_zscore_window: 63
+  dii_zscore_window: 63
+  sip_mom_window: 3                     # month-on-month SIP momentum
+  flow_balance: true                    # FII_net / (FII_buy + DII_buy)
+
+# ---- Macro features ----------------------------------------
+macro:
+  real_rate: true                        # 10Y gilt - CPI (CPI proxy = INR depreciation 12m)
+  policy_stance_proxy: true             # 1 if 10Y change <0 else -1 (simplification)
+  inr_vs_dxy: true                      # INR orthogonalised to DXY via OLS residuals
+
+# ---- Valuation -----------------------------------------
+valuation:
+  pe_zscore_window: 252                 # rolling z-score of trailing P/E (index level / EPS proxy)
+  nifty_pe_csv: "data/raw/manual/nifty_pe.csv"  # NSE bhavcopy or manual
+
+# ---- Cap-segment relative strength ---------------------
+cap_segment:
+  midcap_vs_largecap: true
+  smallcap_vs_largecap: true
+  rolling_window: 63
+
+# ---- TDA (optional — disable via use_tda: false) -------
+tda:
+  use_tda: false
+  rolling_corr_window: 63
+  persistence_landscape_res: 50
+  feature_dim: 10                        # number of landscape coefficients
+
+# ---- GNN (optional — disable via use_gnn: false) -------
+gnn:
+  use_gnn: false
+  sector_indices: ["^CNXFMCG", "^CNXIT", "^CNXPSUBANK", "^CNXAUTO", "^CNXMETAL"]
+  embedding_dim: 8
+  gnn_layers: 2
+
+# ---- Leakage test settings --------------------------------
+leakage:
+  max_future_correlation: 0.05          # flag features with |r| > 0.05 with 1-step-ahead return
+  reference_return: "nifty50_ret_1d"
