@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Testing & linting caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environments & secrets
+.env
+.venv/
+venv/
+*.pem
+*.key
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Data (never commit raw/licensed data or large binary parquets)
+data/raw/*
+!data/raw/manual/
+data/raw/manual/*.csv
+data/processed/*.parquet
+!data/raw/manual/README.md
+
+# Jupyter
+.ipynb_checkpoints/
