@@ -1,0 +1,52 @@
+name: regime
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy=1.26.*
+  - pandas=2.2.*
+  - scipy=1.13.*
+  - scikit-learn=1.5.*
+  - statsmodels=0.14.*
+  - matplotlib=3.9.*
+  - seaborn=0.13.*
+  - plotly=5.22.*
+  - jupyterlab=4.*
+  - ipykernel
+  - pyarrow=16.*
+  - fastparquet
+  - pyyaml
+  - python-dotenv
+  - tqdm
+  - rich
+  - pytest
+  - pytest-cov
+  - ruff
+  - black
+  - mypy
+  - pip:
+    - hmmlearn==0.3.*
+    - pymc==5.16.*
+    - numpyro==0.15.*
+    - arviz==0.19.*
+    - torch==2.3.*
+    - shap==0.45.*
+    - mapie==0.8.*
+    - crepes==0.6.*
+    - filterpy==1.4.*
+    - ruptures==1.1.*
+    - mlflow==2.14.*
+    - pydantic==2.7.*
+    - yfinance==0.2.*
+    - requests==2.32.*
+    - openpyxl==3.1.*
+    - xlrd==2.0.*
+    - giotto-tda==0.6.*
+    # Foundation models - install only if GPU available, see docs/decisions.md
+    # - chronos-forecasting
+    # - torch_geometric
+    - hashlib2
+    - tenacity==8.3.*
+    - tabulate==0.9.*
