@@ -1,0 +1,34 @@
+{
+  "phase": 1,
+  "timestamp_utc": "2026-11-26T13:35:21.531951+00:00",
+  "data_version_hash": "2233b0d7add1e7aa",
+  "config": {
+    "start_date": "2007-01-01",
+    "end_date": "2026-11-26"
+  },
+  "output_path": "data/processed/master.parquet",
+  "shape": {
+    "rows": 5190,
+    "cols": 7
+  },
+  "columns": [
+    "nifty50",
+    "nifty_midcap",
+    "india_vix",
+    "usdinr",
+    "nifty_bank",
+    "us_10y",
+    "dxy"
+  ],
+  "proxies": [
+    {
+      "series": "nifty_midcap",
+      "note": "Nifty Midcap 50 used as proxy for Midcap 100; full 100-stock series unavailable on yfinance"
+    },
+    {
+      "series": "nifty_smallcap",
+      "note": "yfinance coverage for Smallcap 100 is sparse before 2010; gap filled with Nifty Smallcap 250 from 2012"
+    }
+  ],
+  "missing_series": []
+}
