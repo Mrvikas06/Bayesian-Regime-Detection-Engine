@@ -1,0 +1,89 @@
+# ============================================================
+#  MODELS CONFIG — Bayesian Regime Detection Engine
+# ============================================================
+
+seed: 42
+n_regimes: 5
+regime_names: ["Risk-On", "Risk-Off", "Transitional", "Late-Cycle", "Post-Shock"]
+
+features_parquet: "data/processed/features.parquet"
+output_dir: "data/processed/model_outputs"
+mlflow_experiment: "regime-detection"
+
+# ---- Frequentist HMM (Phase 3) ----------------------------
+hmm_freq:
+  n_states_grid: [3, 5, 7]
+  covariance_type: "full"
+  n_iter: 200
+  n_init: 10
+  random_state: 42
+  feature_subset: ["nifty50_ret_1d", "nifty50_ret_vol21", "india_vix",
+                   "fii_net_zscore63", "nifty50_vs_dma200"]
+
+# ---- Bayesian HMM (Phase 4) --------------------------------
+hmm_bayes:
+  n_states: 5
+  draws: 2000
+  tune: 1000
+  chains: 4
+  target_accept: 0.95
+  rhat_threshold: 1.01
+  max_divergences: 0
+  feature_subset: ["nifty50_ret_1d", "nifty50_ret_vol21", "india_vix",
+                   "fii_net_zscore63", "nifty50_vs_dma200"]
+
+# ---- RS-VAR (Phase 5) -------------------------------------
+rs_var:
+  n_regimes: 5
+  lags: 2
+  variables: ["nifty50_ret_1d", "nifty50_ret_vol21", "india_vix",
+              "fii_net_zscore63", "usdinr_ret_1d", "gilt_10y_chg"]
+  draws: 1000
+  tune: 500
+  chains: 4
+
+# ---- Bayesian Deep Learning (Phase 6) ----------------------
+bdl:
+  mc_dropout:
+    hidden: [128, 64, 32]
+    dropout_rate: 0.3
+    n_forward_passes: 100
+    epochs: 100
+    batch_size: 64
+    lr: 0.001
+  variational_bnn:
+    hidden: [64, 32]
+    kl_weight: 0.01
+    epochs: 100
+  deep_ensemble:
+    M: 10
+    hidden: [128, 64]
+    epochs: 100
+  cv_folds: 5
+  cv_gap_days: 63                        # gap between train end and test start
+
+# ---- Foundation Models (Phase 7) ---------------------------
+foundation:
+  chronos:
+    model_id: "amazon/chronos-t5-small"
+    context_length: 252
+    fallback: "train_from_scratch_transformer"
+    fallback_note: "Use if chronos unavailable locally; logs to MLflow"
+  timesfm:
+    model_id: "google/timesfm-1.0-200m"
+    fallback: "train_from_scratch_transformer"
+  classification_head:
+    hidden: [64]
+    epochs: 50
+
+# ---- Ensemble (Phase 8) ------------------------------------
+ensemble:
+  members: ["hmm_freq", "hmm_bayes", "rs_var", "mc_dropout", "deep_ensemble",
+            "chronos_head", "timesfm_head"]
+  stacking:
+    method: "constrained_logistic"       # non-negative, sum-to-1
+    cv_folds: 5
+  bma:
+    use_waic: true
+    use_psis_loo: true
+  significance_test: "diebold_mariano"
