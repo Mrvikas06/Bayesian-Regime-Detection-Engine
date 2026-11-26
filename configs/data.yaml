@@ -1,0 +1,81 @@
+# ============================================================
+#  DATA CONFIG — Bayesian Regime Detection Engine
+# ============================================================
+
+seed: 42
+start_date: "2007-01-01"      # 15+ years ending today
+end_date:   "2026-11-26"      # pinned at build time; override with --end-date
+
+raw_dir:       data/raw
+processed_dir: data/processed
+lineage_dir:   data/lineage
+
+# ---- Index series (via yfinance) --------------------------------
+indices:
+  nifty50:
+    ticker: "^NSEI"
+    name: "Nifty 50"
+  nifty_midcap:
+    ticker: "^NSEMDCP50"      # Nifty Midcap 50 (proxy for Midcap 100)
+    name: "Nifty Midcap"
+    is_proxy: true
+    proxy_note: "Nifty Midcap 50 used as proxy for Midcap 100; full 100-stock series unavailable on yfinance"
+  nifty_smallcap:
+    ticker: "^NSESCP"         # yfinance proxy; falls back to NSE-downloaded CSV
+    name: "Nifty Smallcap"
+    is_proxy: true
+    proxy_note: "yfinance coverage for Smallcap 100 is sparse before 2010; gap filled with Nifty Smallcap 250 from 2012"
+  india_vix:
+    ticker: "^INDIAVIX"
+    name: "India VIX"
+  usdinr:
+    ticker: "INR=X"
+    name: "USD/INR"
+  nifty_bank:
+    ticker: "^NSEBANK"
+    name: "Nifty Bank"
+
+# ---- Macro / fixed income (yfinance) ----------------------------
+macro:
+  gilt_10y:
+    ticker: "IN10YT=RR"       # Reuters/Refinitiv INDIA 10Y (may be sparse)
+    name: "India 10Y Gilt Yield"
+    is_proxy: false
+    fallback_csv: "data/raw/manual/india_10y_rbi.csv"   # RBI DBIE download
+  us_10y:
+    ticker: "^TNX"
+    name: "US 10Y Treasury"
+  dxy:
+    ticker: "DX-Y.NYB"
+    name: "DXY Index"
+
+# ---- Flows (manual / AMFI / NSE downloads) ----------------------
+flows:
+  fii_dii:
+    source: "nse_csv"
+    csv_path: "data/raw/manual/fii_dii_flows.csv"
+    fallback_note: "Download from NSE India → Reports → FII DII Activity"
+    columns: [date, fii_buy, fii_sell, fii_net, dii_buy, dii_sell, dii_net]
+  sip:
+    source: "amfi_csv"
+    csv_path: "data/raw/manual/sip_monthly.csv"
+    fallback_note: "Download from AMFI industry data"
+    frequency: "M"
+
+# ---- Credit spread proxy ----------------------------------------
+credit_spread:
+  source: "derived"
+  note: "AAA-Gilt spread approximated as CRISIL AAA composite minus 10Y gilt; exact series unavailable on yfinance, use RBI/CMIE manual download"
+  csv_path: "data/raw/manual/credit_spread.csv"
+
+# ---- Quality thresholds -----------------------------------------
+quality:
+  max_missing_pct: 0.03           # flag series with > 3% gaps
+  max_outlier_zscore: 5.0         # flag |z| > 5 as outlier
+  min_history_years: 10           # reject series shorter than this
+
+# ---- Output filenames -------------------------------------------
+output:
+  master_parquet: "data/processed/master.parquet"
+  quality_report: "reports/data_quality_report.html"
+  lineage_json:   "data/lineage/phase1_lineage.json"
