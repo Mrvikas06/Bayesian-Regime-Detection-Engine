@@ -1,0 +1,17 @@
+{
+  "timestamp_utc": "2026-11-26T13:35:36.414944+00:00",
+  "shape": {
+    "rows": 5190,
+    "cols": 7
+  },
+  "date_range": {
+    "start": "2007-01-01",
+    "end": "2026-11-25"
+  },
+  "missing_flags": 4,
+  "outlier_flags": 7,
+  "history_flags": 0,
+  "weekend_flag": false,
+  "total_flags": 11,
+  "columns_all_nan": []
+}
