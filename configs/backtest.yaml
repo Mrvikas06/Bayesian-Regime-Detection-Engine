@@ -1,0 +1,53 @@
+# ============================================================
+#  BACKTEST CONFIG — Bayesian Regime Detection Engine
+# ============================================================
+
+seed: 42
+
+# ---- Case studies (Phase 11) --------------------------------
+case_studies:
+  - name: "2013_taper_tantrum"
+    start: "2013-04-01"
+    end:   "2013-10-31"
+    expected_regime: "Risk-Off"
+    description: "Fed taper talk → FII outflows, INR depreciation, Nifty -15%"
+
+  - name: "2016_demonetisation"
+    start: "2016-10-01"
+    end:   "2017-03-31"
+    expected_regime: "Post-Shock"
+    description: "Nov 2016 demonetisation shock; market recovered in 3 months"
+
+  - name: "2018_ilfs"
+    start: "2018-07-01"
+    end:   "2019-01-31"
+    expected_regime: "Risk-Off"
+    description: "IL&FS default → NBFC contagion, mid/small-cap rout"
+
+  - name: "2020_covid"
+    start: "2020-01-15"
+    end:   "2020-07-31"
+    expected_regime: "Post-Shock"
+    description: "COVID crash Mar 2020; VIX >80; rapid recovery from Apr"
+
+  - name: "2024_election"
+    start: "2024-04-01"
+    end:   "2024-07-31"
+    expected_regime: "Transitional"
+    description: "2024 general election uncertainty; Jun 4 result volatility"
+
+# ---- Monte Carlo (Phase 12) --------------------------------
+monte_carlo:
+  n_paths: 5000
+  horizon_days: 252
+  confidence_levels: [0.95, 0.99]
+  regime_conditional: true             # separate paths per starting regime
+
+# ---- Backtest parameters -----------------------------------
+backtest:
+  start: "2019-01-01"
+  end:   "2024-12-31"
+  transaction_cost_bps: 20
+  min_holding_days: 5
+  ir_benchmark: "nifty50"
+  report_path: "reports/backtest_report.html"
