@@ -1,0 +1,6 @@
+,Risk-On,Risk-Off,Transitional,Late-Cycle,Post-Shock,stickiness,expected_duration_days
+Risk-On,0.9843,0.0,0.0,0.0157,0.0,0.9843,63.7451
+Risk-Off,0.0,0.9767,0.0149,0.0,0.0084,0.9767,42.8772
+Transitional,0.0,0.0068,0.9686,0.0192,0.0054,0.9686,31.843
+Late-Cycle,0.0114,0.0013,0.0139,0.9733,0.0,0.9733,37.5159
+Post-Shock,0.0019,0.0056,0.0131,0.0,0.9794,0.9794,48.6068
