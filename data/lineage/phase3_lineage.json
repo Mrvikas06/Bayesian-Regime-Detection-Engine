@@ -1,0 +1,45 @@
+{
+  "phase": 3,
+  "timestamp_utc": "2026-11-27T14:13:45.409187+00:00",
+  "data_version_hash": "2233b0d7add1e7aa",
+  "config_hash": "e7431fba6dc21dba",
+  "feature_set_version": "620952a423156df7",
+  "model_version": "2683db44e0de0d5c",
+  "model": "hmm_freq_5state",
+  "features_used": [
+    "nifty50_ret_1d",
+    "nifty50_ret_vol21",
+    "india_vix",
+    "midcap_vs_nifty_z63",
+    "nifty50_vs_dma200"
+  ],
+  "proxy_notes": [
+    "Feature 'fii_net_zscore63' missing; using proxy 'midcap_vs_nifty_z63'"
+  ],
+  "state_map": {
+    "0": "Late-Cycle",
+    "1": "Risk-Off",
+    "2": "Post-Shock",
+    "3": "Transitional",
+    "4": "Risk-On"
+  },
+  "seed_stability": {
+    "seeds": [
+      42,
+      101,
+      202,
+      303,
+      404
+    ],
+    "mean_ari": 0.9145,
+    "min_ari": 0.8879,
+    "mean_label_agreement": 0.9601
+  },
+  "oos_metrics": {
+    "log_loss": 5.9772,
+    "brier_score": 1.1041,
+    "ece": 0.5431,
+    "accuracy_vs_weak_label": 0.4223,
+    "n_eval": 2060
+  }
+}
