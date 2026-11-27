@@ -92,3 +92,12 @@
 **Alternatives:** α = 0.20 (too wide); per-regime α.  
 **Reason:** 90% coverage is IC-interpretable as "9 in 10 days the true regime is in the prediction set"; not too conservative for a 5-class problem.  
 **Date:** 2026-11-26
+
+---
+
+## D-011: Bayesian HMM Weekly Posterior + Daily Causal Filter
+
+**Decision:** Fit the PyMC Bayesian HMM NUTS posterior (`2,000 draws × 4 chains`) on weekly (`W-FRI`) training observations (`<= 2018-12-31`, ~620 weeks), then run the daily causal forward filter using `P_daily = 0.8 * I + 0.2 * P_weekly`.  
+**Alternatives:** Full daily `T = 2,825` NUTS sampling (too slow on CPU: >10 hours for 4×3,000 draws); ADVI/mean-field VI (underestimates posterior correlation).  
+**Reason:** Weekly resampling reduces daily autocorrelation and makes 4-chain exact NUTS feasible in minutes while preserving daily regime filtering and full 90% credible intervals.  
+**Date:** 2026-11-27
